@@ -29,6 +29,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             }
             MessageBox.Show("На жаль, нічого не знайдено");
         }
+        //алгоритм пошуку, поки не зовсім коректно працює через регістр
         public void ChangeInfo(DataGridView table, TextBox box, List <Gangstar> list)
         {
             int row = table.CurrentCell.RowIndex;
@@ -50,6 +51,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
                 case 12: list[row].crime = box.Text; break;
             }
         }
+        //алгоритм заміни даних в таблиці
         public int Died(DataGridView table)
         {
             int index = table.CurrentCell.RowIndex;
@@ -61,11 +63,12 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             return index;
 
         }
+        //смерть злочинця
         public void ChangeToBase()
         {
             mode = true;
-        }
-        public void ChangeToArchive()
+        }                                                   //перемикач режиму таблиці
+        public void ChangeToArchive()                                           
         {
             mode = false;
         }

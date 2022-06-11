@@ -66,7 +66,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              ArchiveButton.BackColor = Color.Red;
              BaseButton.BackColor = Color.Green;
          }
-
+        //Додавання злочинця до ОСНОВНОЇ БАЗИ
          private void BaseButton_Click(object sender, EventArgs e)
          {
              ArchiveButton.BackColor = Color.Red;
@@ -76,7 +76,8 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              LoadTable(MainBase);
 
          }
-         private void ArchiveButton_Click(object sender, EventArgs e)
+        //Перемикання на ОСНОВНУ БАЗУ
+        private void ArchiveButton_Click(object sender, EventArgs e)
          {
              BaseButton.BackColor = Color.Blue;
              ArchiveButton.BackColor = Color.Green;
@@ -84,12 +85,14 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              ClearTable();
              LoadTable(Archive);
          }
-         private void ClearTable()
+        //Перемикання на АРХІВ
+        private void ClearTable()
          {
              BaseOrArchiveTable.Rows.Clear();
              BaseOrArchiveTable.Refresh();
          }
-         private void LoadTable(List<Gangstar> list)
+        //Додатковий метод для очистки сторінки
+        private void LoadTable(List<Gangstar> list)
          {
              foreach (Gangstar gangstar in list)
              {
@@ -98,17 +101,20 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 
              }
          }
-         private void SearchButton_Click(object sender, EventArgs e)
+        //Додатковий метод для завантаження списку злочинців у таблицю
+        private void SearchButton_Click(object sender, EventArgs e)
          {
              data.Search(BaseOrArchiveTable, SearchTextBox);
          }
-         private void DiedButton_Click(object sender, EventArgs e)
+        //Натискання на кнопку пошуку
+        private void DiedButton_Click(object sender, EventArgs e)
          {
 
              if (data.mode) MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
              else Archive.RemoveAt(data.Died(BaseOrArchiveTable));
          }
-         private void MoveToArchiveButton_Click(object sender, EventArgs e)
+        //Натискання на кнопку смерті
+        private void MoveToArchiveButton_Click(object sender, EventArgs e)
          {
              int index = BaseOrArchiveTable.CurrentCell.RowIndex;
              BaseButton.BackColor = Color.Blue;
@@ -118,7 +124,8 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              ClearTable();
              LoadTable(Archive);
          }
-         private void MoveToBaseButton_Click(object sender, EventArgs e)
+        //Перенесення злочинся до АРХІВУ
+        private void MoveToBaseButton_Click(object sender, EventArgs e)
          {
              int index = BaseOrArchiveTable.CurrentCell.RowIndex;
              BaseButton.BackColor = Color.Green;
@@ -128,19 +135,22 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              ClearTable();
              LoadTable(MainBase);
          }
-         private void ConvertToJSon()
+        //Перенесення злочинця до ОСНОВНОЇ БАЗИ
+        private void ConvertToJSon()
          {
              data.based = JsonConvert.SerializeObject(MainBase);
              data.archived = JsonConvert.SerializeObject(Archive);
-         }
-         private void SaveJSonToFile()
-         {
+        }
+        //Запис рядка у форматі .json
+        private void SaveJSonToFile()
+        {
 
-             Directory.CreateDirectory($@"CurDir/json");
-             File.WriteAllText(filenamebased, data.based);
-             File.WriteAllText(filenamearchive, data.archived);
-         }
-         private void ConvertToList()
+            Directory.CreateDirectory($@"CurDir/json");
+            File.WriteAllText(filenamebased, data.based);
+            File.WriteAllText(filenamearchive, data.archived);
+        }
+        //Запис рядка у форматі json до файлу у форматі .json
+        private void ConvertToList()
          {
              MainBase = JsonConvert.DeserializeObject<List<Gangstar>>(File.ReadAllText(filenamebased));
              Archive = JsonConvert.DeserializeObject<List<Gangstar>>(File.ReadAllText(filenamearchive));
@@ -168,13 +178,14 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
                  ChangeTextBox.Clear();
              }
          }
+        //Кнопка ЗАМІНИТИ
          private void SaveButton_Click(object sender, EventArgs e)
          {
              ConvertToJSon();
              SaveJSonToFile();
 
          }
-
+        //Кнопка ЗБЕРЕЖЕННЯ даних по файлах у форматы .json
          private void Form1_Load(object sender, EventArgs e)
          {
 
