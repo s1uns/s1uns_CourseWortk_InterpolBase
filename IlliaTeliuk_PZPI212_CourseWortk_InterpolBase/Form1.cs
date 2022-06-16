@@ -1,25 +1,20 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Linq;
+
 using System.Collections.Generic;
 namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 {
     public partial class InterpolBase : Form
     {
         public string CurDir = Environment.CurrentDirectory;
-        List<Gangstar> MainBase = new List<Gangstar>();
-        List<Gangstar> Archive = new List<Gangstar>();
+        
         Data data = new Data();
-        public string filenamebased = $@"CurDir/json/mainbasejson.json";
-        public string filenamearchive = $@"CurDir/json/archivejson.json";
         public InterpolBase()
         {
             InitializeComponent();
 
-
-            ConvertToList();
-            LoadTable(MainBase);
+            if(File.Exists(data.filenamearchive) && File.Exists(data.filenamebased)) { 
+            data.ConvertToList(out data.MainBase, out data.Archive, data.filenamebased, data.filenamearchive);
+            LoadTable(data.MainBase);
+            }
 
 
 
@@ -60,9 +55,9 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              GangRoleTextBox.Clear();
              gangsta.crime = CrimeTextBox.Text;
              CrimeTextBox.Clear();
-             MainBase.Add(gangsta);
+             data.MainBase.Add(gangsta);
              ClearTable();
-             LoadTable(MainBase);
+             LoadTable(data.MainBase);
              ArchiveButton.BackColor = Color.Red;
              BaseButton.BackColor = Color.Green;
          }
@@ -73,7 +68,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              BaseButton.BackColor = Color.Green;
              data.ChangeToBase();
              ClearTable();
-             LoadTable(MainBase);
+             LoadTable(data.MainBase);
 
          }
         //Перемикання на ОСНОВНУ БАЗУ
@@ -83,7 +78,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              ArchiveButton.BackColor = Color.Green;
              data.ChangeToArchive();
              ClearTable();
-             LoadTable(Archive);
+             LoadTable(data.Archive);
          }
         //Перемикання на АРХІВ
         private void ClearTable()
@@ -93,14 +88,15 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
          }
         //Додатковий метод для очистки сторінки
         private void LoadTable(List<Gangstar> list)
-         {
+         {    if(list.Count > 0) { 
              foreach (Gangstar gangstar in list)
              {
 
                  BaseOrArchiveTable.Rows.Add(gangstar.secondName, gangstar.name, gangstar.fatherName, gangstar.nickname, gangstar.growth, gangstar.hairColor, gangstar.eyesColor, gangstar.specialSigns, gangstar.nationality, gangstar.dateBirth, gangstar.gang, gangstar.roleInGang, gangstar.crime);
 
              }
-         }
+          }
+        }
         //Додатковий метод для завантаження списку злочинців у таблицю
         private void SearchButton_Click(object sender, EventArgs e)
          {
@@ -110,8 +106,8 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         private void DiedButton_Click(object sender, EventArgs e)
          {
 
-             if (data.mode) MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
-             else Archive.RemoveAt(data.Died(BaseOrArchiveTable));
+             if (data.mode) data.MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
+             else data.Archive.RemoveAt(data.Died(BaseOrArchiveTable));
          }
         //Натискання на кнопку смерті
         private void MoveToArchiveButton_Click(object sender, EventArgs e)
@@ -119,10 +115,10 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              int index = BaseOrArchiveTable.CurrentCell.RowIndex;
              BaseButton.BackColor = Color.Blue;
              ArchiveButton.BackColor = Color.Green;
-             Archive.Add(MainBase[index]);
-             MainBase.RemoveAt(index);
+             data.Archive.Add(data.MainBase[index]);
+             data.MainBase.RemoveAt(index);
              ClearTable();
-             LoadTable(Archive);
+             LoadTable(data.Archive);
          }
         //Перенесення злочинся до АРХІВУ
         private void MoveToBaseButton_Click(object sender, EventArgs e)
@@ -130,65 +126,42 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              int index = BaseOrArchiveTable.CurrentCell.RowIndex;
              BaseButton.BackColor = Color.Green;
              ArchiveButton.BackColor = Color.Red;
-             MainBase.Add(Archive[index]);
-             Archive.RemoveAt(index);
+             data.MainBase.Add(data.Archive[index]);
+             data.Archive.RemoveAt(index);
              ClearTable();
-             LoadTable(MainBase);
+             LoadTable(data.MainBase);
          }
         //Перенесення злочинця до ОСНОВНОЇ БАЗИ
-        private void ConvertToJSon()
-         {
-             data.based = JsonConvert.SerializeObject(MainBase);
-             data.archived = JsonConvert.SerializeObject(Archive);
-        }
-        //Запис рядка у форматі .json
-        private void SaveJSonToFile()
-        {
-
-            Directory.CreateDirectory($@"CurDir/json");
-            File.WriteAllText(filenamebased, data.based);
-            File.WriteAllText(filenamearchive, data.archived);
-        }
-        //Запис рядка у форматі json до файлу у форматі .json
-        private void ConvertToList()
-         {
-             MainBase = JsonConvert.DeserializeObject<List<Gangstar>>(File.ReadAllText(filenamebased));
-             Archive = JsonConvert.DeserializeObject<List<Gangstar>>(File.ReadAllText(filenamearchive));
-
-
-         }
+        
+        
          public void ChangeButton_Click(object sender, EventArgs e)
          {
              if (data.mode)
              {
                  ArchiveButton.BackColor = Color.Red;
                  BaseButton.BackColor = Color.Green;
-                 data.ChangeInfo(BaseOrArchiveTable, ChangeTextBox, MainBase);
+                 data.ChangeInfo(BaseOrArchiveTable, ChangeTextBox, data.MainBase);
                  ClearTable();
-                 LoadTable(MainBase);
+                 LoadTable(data.MainBase);
                  ChangeTextBox.Clear();
              }
              else
              {
                  BaseButton.BackColor = Color.Blue;
                  ArchiveButton.BackColor = Color.Green;
-                 data.ChangeInfo(BaseOrArchiveTable, ChangeTextBox, Archive);
+                 data.ChangeInfo(BaseOrArchiveTable, ChangeTextBox, data.Archive);
                  ClearTable();
-                 LoadTable(Archive);
+                 LoadTable(data.Archive);
                  ChangeTextBox.Clear();
              }
          }
         //Кнопка ЗАМІНИТИ
          private void SaveButton_Click(object sender, EventArgs e)
          {
-             ConvertToJSon();
-             SaveJSonToFile();
+             data.ConvertToJSon(out data.based, out data.archived, data.MainBase, data.Archive);
+             data.SaveJSonToFile(data.filenamebased, data.filenamearchive, data.based, data.archived);
 
          }
-        //Кнопка ЗБЕРЕЖЕННЯ даних по файлах у форматы .json
-         private void Form1_Load(object sender, EventArgs e)
-         {
-
-         }
+        //Кнопка ЗБЕРЕГТИ
     }
 }

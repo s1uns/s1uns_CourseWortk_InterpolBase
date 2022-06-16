@@ -1,4 +1,8 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +13,16 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
     public class Data
     {
         public bool mode = true;
-        public string based;
-        public string archived;
+        //Перемикач між основною базою та архівом
+        public string? based;
+        public string? archived;
+        //Рядки для запису у форматі json
+        public string filenamebased = $@"CurDir/json/mainbasejson.json";
+        public string filenamearchive = $@"CurDir/json/archivejson.json";
+        //Рядки для визначення розташування файлів .json
+        public List<Gangstar> MainBase = new List<Gangstar>();
+        public List<Gangstar> Archive = new List<Gangstar>();
+        //Листи для серіалізації з файлів json
         public void Search(DataGridView table, TextBox box)
         {
             int pickedPosition = table.CurrentCell.RowIndex;
@@ -71,6 +83,39 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         public void ChangeToArchive()                                           
         {
             mode = false;
+        }
+
+        
+
+
+
+
+
+
+        //РОБОТА ІЗ JSON
+
+        //Запис рядка у форматі .json
+        public void SaveJSonToFile(string filename1, string filename2, string jsonstring1, string jsonstring2)
+        {
+
+            Directory.CreateDirectory($@"CurDir/json");
+            File.WriteAllText(filename1, jsonstring1);
+            File.WriteAllText(filename2, jsonstring2);
+
+        }
+        //Запис рядка у форматі json до файлу у форматі .json
+        public void ConvertToList(out List<Gangstar> basedlist, out List<Gangstar> archivedlist, string? filename1, string? filename2)
+        {
+            basedlist = JsonConvert.DeserializeObject<List<Gangstar>>(File.ReadAllText(filename1));
+            archivedlist = JsonConvert.DeserializeObject<List<Gangstar>>(File.ReadAllText(filename2));
+
+
+        }
+        public void ConvertToJSon(out string? jsonstring1, out string? jsonstring2, List<Gangstar> basedlist, List<Gangstar> archivedlist)
+        {
+            jsonstring1 = JsonConvert.SerializeObject(basedlist);
+            jsonstring2 = JsonConvert.SerializeObject(archivedlist);
+            
         }
     }
 }
