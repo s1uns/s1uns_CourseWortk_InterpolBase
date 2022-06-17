@@ -117,5 +117,12 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             jsonstring2 = JsonConvert.SerializeObject(archivedlist);
             
         }
+        public void SaveData(string filename1, string filename2, string? jsonstring1, string? jsonstring2, List<Gangstar> basedlist, List<Gangstar> archivedlist)
+        {
+            ConvertToJSon(out jsonstring1, out jsonstring2, basedlist, archivedlist);
+            SaveJSonToFile(filename1, filename2, jsonstring1, jsonstring2);
+           /* ConvertToJSon(out based, out archived, MainBase, Archive);
+            SaveJSonToFile(filenamebased, filenamearchive, based, archived);*/
+        }
     }
 }

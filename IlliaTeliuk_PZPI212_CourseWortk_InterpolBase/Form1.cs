@@ -15,7 +15,11 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             data.ConvertToList(out data.MainBase, out data.Archive, data.filenamebased, data.filenamearchive);
             LoadTable(data.MainBase);
             }
+             else
+             {
+            data.SaveData(data.filenamebased, data.filenamearchive, data.based, data.archived, data.MainBase, data.Archive);
 
+             }
 
 
 
@@ -24,7 +28,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 
 
 
-         private void AddButton_Click(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
          {
              Gangstar gangsta = new Gangstar();
              gangsta.name = NameTextBox.Text;
@@ -105,32 +109,54 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         //Натискання на кнопку пошуку
         private void DiedButton_Click(object sender, EventArgs e)
          {
-
-             if (data.mode) data.MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
-             else data.Archive.RemoveAt(data.Died(BaseOrArchiveTable));
+            try
+            {
+                if (data.mode) data.MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
+                else data.Archive.RemoveAt(data.Died(BaseOrArchiveTable));
+            }
+            catch {
+                MessageBox.Show("Вибачте, трапилась помилка. Перевірте правильність вибору злочинця");
+            }
+             
          }
         //Натискання на кнопку смерті
         private void MoveToArchiveButton_Click(object sender, EventArgs e)
          {
-             int index = BaseOrArchiveTable.CurrentCell.RowIndex;
-             BaseButton.BackColor = Color.Blue;
-             ArchiveButton.BackColor = Color.Green;
-             data.Archive.Add(data.MainBase[index]);
-             data.MainBase.RemoveAt(index);
-             ClearTable();
-             LoadTable(data.Archive);
+            try
+            {
+                int index = BaseOrArchiveTable.CurrentCell.RowIndex;
+                BaseButton.BackColor = Color.Blue;
+                ArchiveButton.BackColor = Color.Green;
+                data.Archive.Add(data.MainBase[index]);
+                data.MainBase.RemoveAt(index);
+                ClearTable();
+                LoadTable(data.Archive);
+            }
+            catch
+            {
+                MessageBox.Show("Злочинець вже знаходиться в архіві!");
+            }
+            
          }
         //Перенесення злочинся до АРХІВУ
         private void MoveToBaseButton_Click(object sender, EventArgs e)
          {
-             int index = BaseOrArchiveTable.CurrentCell.RowIndex;
-             BaseButton.BackColor = Color.Green;
-             ArchiveButton.BackColor = Color.Red;
-             data.MainBase.Add(data.Archive[index]);
-             data.Archive.RemoveAt(index);
-             ClearTable();
-             LoadTable(data.MainBase);
-         }
+
+            try
+            {
+                int index = BaseOrArchiveTable.CurrentCell.RowIndex;
+                BaseButton.BackColor = Color.Green;
+                ArchiveButton.BackColor = Color.Red;
+                data.MainBase.Add(data.Archive[index]);
+                data.Archive.RemoveAt(index);
+                ClearTable();
+                LoadTable(data.MainBase);
+            }
+            catch
+            {
+                MessageBox.Show("Злочинець вже знаходиться в основній базі!");
+            }
+        }
         //Перенесення злочинця до ОСНОВНОЇ БАЗИ
         
         
@@ -158,8 +184,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         //Кнопка ЗАМІНИТИ
          private void SaveButton_Click(object sender, EventArgs e)
          {
-             data.ConvertToJSon(out data.based, out data.archived, data.MainBase, data.Archive);
-             data.SaveJSonToFile(data.filenamebased, data.filenamearchive, data.based, data.archived);
+            data.SaveData(data.filenamebased, data.filenamearchive, data.based, data.archived, data.MainBase, data.Archive);
 
          }
         //Кнопка ЗБЕРЕГТИ
