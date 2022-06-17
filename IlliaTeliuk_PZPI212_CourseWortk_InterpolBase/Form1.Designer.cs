@@ -82,7 +82,11 @@
             this.NewCrimeButton = new System.Windows.Forms.Button();
             this.AddButton = new System.Windows.Forms.Button();
             this.DiedButton = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.BaseOrArchiveTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // BaseButton
@@ -681,7 +685,7 @@
             this.AddButton.BackColor = System.Drawing.Color.Green;
             this.AddButton.Image = ((System.Drawing.Image)(resources.GetObject("AddButton.Image")));
             this.AddButton.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.AddButton.Location = new System.Drawing.Point(252, 625);
+            this.AddButton.Location = new System.Drawing.Point(276, 625);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(188, 83);
             this.AddButton.TabIndex = 39;
@@ -702,11 +706,31 @@
             this.DiedButton.UseVisualStyleBackColor = false;
             this.DiedButton.Click += new System.EventHandler(this.DiedButton_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(1193, 466);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(259, 175);
+            this.pictureBox1.TabIndex = 41;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(165, 675);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(105, 70);
+            this.pictureBox2.TabIndex = 42;
+            this.pictureBox2.TabStop = false;
+            // 
             // InterpolBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1485, 757);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.DiedButton);
             this.Controls.Add(this.AddButton);
             this.Controls.Add(this.NewCrimeButton);
@@ -755,6 +779,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Довідник Інтерполу by Телюк ПЗПІ-21-2";
             ((System.ComponentModel.ISupportInitialize)(this.BaseOrArchiveTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -815,5 +841,7 @@
         private DataGridViewTextBoxColumn Gang;
         private DataGridViewTextBoxColumn GangRole;
         private DataGridViewTextBoxColumn Crime;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
     }
 }

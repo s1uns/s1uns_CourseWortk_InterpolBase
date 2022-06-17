@@ -23,6 +23,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         public List<Gangstar> MainBase = new List<Gangstar>();
         public List<Gangstar> Archive = new List<Gangstar>();
         //Листи для серіалізації з файлів json
+        public bool isValide = true;
         public void Search(DataGridView table, TextBox box)
         {
             int pickedPosition = table.CurrentCell.RowIndex;
@@ -31,7 +32,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
                 if (pickedPosition < table.RowCount - 1) pickedPosition++; else pickedPosition = 0;
                 for (int j = 0; j < 13; j++)
                 {
-                    if (table[j, pickedPosition].FormattedValue.ToString().Contains(box.Text.Trim()))
+                    if (table[j, pickedPosition].FormattedValue.ToString().ToUpper().Contains(box.Text.ToUpper().Trim()))
                     {
                         table.CurrentCell = table[0, pickedPosition];
                         box.Clear();
@@ -39,7 +40,9 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
                     }
                 }
             }
-            MessageBox.Show("На жаль, нічого не знайдено");
+            if(mode) MessageBox.Show("На жаль, в основній базі такої людини не знайдено, перевірте архів");
+            else if (mode) MessageBox.Show("На жаль, в архіві такої людини не знайдено, перевірте основну базу");
+
         }
         //алгоритм пошуку, поки не зовсім коректно працює через регістр
         public void ChangeInfo(DataGridView table, TextBox box, List <Gangstar> list)
@@ -85,11 +88,42 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             mode = false;
         }
 
-        
+        public void MoveData(List<Gangstar> list1, List<Gangstar> list2, int i)
+        {
+            list2.Add(list1[i]);
+            list1.RemoveAt(i);
+        }
 
+        public void Validation(string a,ref bool isValide, string type)
+        {
+            switch (type)
+            {
+                case "string":
+                    if (string.IsNullOrEmpty(a)) { isValide = false; return; }
+                    else
+                    {
+                        foreach (char b in a)
+                        {
+                            if (Char.IsDigit(b)) { isValide = false; return; }
+                        }
+                        
+                    }
+                    break;
+                case "number":
+                    if (string.IsNullOrEmpty(a)) { isValide = false; return; }
+                    else
+                    {
+                        foreach (char b in a)
+                        {
+                            if (!Char.IsDigit(b)) { isValide = false; return; }
+                        }
 
+                    }
+                    break;
 
-
+            }
+        }
+       
 
 
         //РОБОТА ІЗ JSON
@@ -121,8 +155,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         {
             ConvertToJSon(out jsonstring1, out jsonstring2, basedlist, archivedlist);
             SaveJSonToFile(filename1, filename2, jsonstring1, jsonstring2);
-           /* ConvertToJSon(out based, out archived, MainBase, Archive);
-            SaveJSonToFile(filenamebased, filenamearchive, based, archived);*/
         }
     }
-}
+} 
+
