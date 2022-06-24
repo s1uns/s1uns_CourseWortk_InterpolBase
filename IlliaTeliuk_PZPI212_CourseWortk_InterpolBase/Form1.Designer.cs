@@ -84,6 +84,7 @@
             this.DiedButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.GangButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.BaseOrArchiveTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -724,11 +725,25 @@
             this.pictureBox2.TabIndex = 42;
             this.pictureBox2.TabStop = false;
             // 
+            // GangButton
+            // 
+            this.GangButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.GangButton.Image = ((System.Drawing.Image)(resources.GetObject("GangButton.Image")));
+            this.GangButton.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.GangButton.Location = new System.Drawing.Point(661, 664);
+            this.GangButton.Name = "GangButton";
+            this.GangButton.Size = new System.Drawing.Size(325, 81);
+            this.GangButton.TabIndex = 43;
+            this.GangButton.Text = "ІНШІ ЧЛЕНИ\r\nБАНДИ";
+            this.GangButton.UseVisualStyleBackColor = false;
+            this.GangButton.Click += new System.EventHandler(this.GangButton_Click);
+            // 
             // InterpolBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1485, 757);
+            this.Controls.Add(this.GangButton);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.DiedButton);
@@ -773,6 +788,7 @@
             this.Controls.Add(this.BaseButton);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "InterpolBase";
@@ -843,5 +859,6 @@
         private DataGridViewTextBoxColumn Crime;
         private PictureBox pictureBox1;
         private PictureBox pictureBox2;
+        private Button GangButton;
     }
 }

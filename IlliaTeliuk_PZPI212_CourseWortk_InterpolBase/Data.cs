@@ -17,35 +17,42 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         public string? based;
         public string? archived;
         //Рядки для запису у форматі json
-        public string filenamebased = $@"CurDir/json/mainbasejson.json";
-        public string filenamearchive = $@"CurDir/json/archivejson.json";
+        public string filenamebased = $@"saves/json/mainbasejson.json";
+        public string filenamearchive = $@"saves/json/archivejson.json";
         //Рядки для визначення розташування файлів .json
         public List<Gangstar> MainBase = new List<Gangstar>();
         public List<Gangstar> Archive = new List<Gangstar>();
-        //Листи для серіалізації з файлів json
+        //Листи для серіалізації з файлів json та взаємодії із кнопкою банд
         public bool isValide = true;
-        public void Search(DataGridView table, TextBox box)
+        //Показник валідності введених даних
+        public List<Gangstar> Gang = new List<Gangstar>();
+        //Лист для показу усіх членів угрупування
+        public void Search(DataGridView table, TextBox box, bool mode)
         {
-            int pickedPosition = table.CurrentCell.RowIndex;
-            for (int i = 0; i < table.RowCount; i++)
+            if (box.Text.Length == 0) MessageBox.Show("Неможливо здійснити пошук, адже Ви не заповнили поле!");
+            else
             {
-                if (pickedPosition < table.RowCount - 1) pickedPosition++; else pickedPosition = 0;
-                for (int j = 0; j < 13; j++)
+                int pickedPosition = table.CurrentCell.RowIndex;
+                for (int i = 0; i < table.RowCount; i++)
                 {
-                    if (table[j, pickedPosition].FormattedValue.ToString().ToUpper().Contains(box.Text.ToUpper().Trim()))
+                    if (pickedPosition < table.RowCount - 1) pickedPosition++; else pickedPosition = 0;
+                    for (int j = 0; j < 13; j++)
                     {
-                        table.CurrentCell = table[0, pickedPosition];
-                        box.Clear();
-                        return;
+                        if (table[j, pickedPosition].FormattedValue.ToString().ToUpper().Contains(box.Text.ToUpper()))
+                        {
+                            table.CurrentCell = table[0, pickedPosition];
+                            return;
+                        }
                     }
                 }
+                if (mode) MessageBox.Show("На жаль, в основній базі такої людини не знайдено, перевірте архів");
+                else MessageBox.Show("На жаль, в архіві такої людини не знайдено, перевірте основну базу");
             }
-            if(mode) MessageBox.Show("На жаль, в основній базі такої людини не знайдено, перевірте архів");
-            else if (mode) MessageBox.Show("На жаль, в архіві такої людини не знайдено, перевірте основну базу");
+
 
         }
         //алгоритм пошуку, поки не зовсім коректно працює через регістр
-        public void ChangeInfo(DataGridView table, TextBox box, List <Gangstar> list)
+        public void ChangeInfo(DataGridView table, TextBox box, List<Gangstar> list)
         {
             int row = table.CurrentCell.RowIndex;
             int col = table.CurrentCell.ColumnIndex;
@@ -83,7 +90,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         {
             mode = true;
         }                                                   //перемикач режиму таблиці
-        public void ChangeToArchive()                                           
+        public void ChangeToArchive()
         {
             mode = false;
         }
@@ -94,23 +101,27 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             list1.RemoveAt(i);
         }
 
-        public void Validation(string a,ref bool isValide, string type)
+        public void Validation(string a, ref bool isValide, string type)
         {
             switch (type)
             {
-                case "string":
+                case "neutral":
                     if (string.IsNullOrEmpty(a)) { isValide = false; return; }
+                    break;
+                case "string":
+                    if (a.Length < 2) { isValide = false; return; }
                     else
                     {
                         foreach (char b in a)
                         {
                             if (Char.IsDigit(b)) { isValide = false; return; }
                         }
-                        
+
                     }
                     break;
                 case "number":
                     if (string.IsNullOrEmpty(a)) { isValide = false; return; }
+                    else if (Convert.ToInt32(a) > 260 || Convert.ToInt32(a) < 50) { isValide = false; return; }
                     else
                     {
                         foreach (char b in a)
@@ -120,11 +131,54 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 
                     }
                     break;
-
+                case "date":
+                    if (a.Length < 9) { isValide = false; return; }
+                    break;
             }
         }
-       
+        public string Capitalize(string? a)
+        {
+            return (char.ToUpper(a[0]) + a.Substring(1));
+        }
+        public void SelectLastRow(DataGridView table)
+        {
+            table.ClearSelection();//If you want
+            int nRowIndex = table.Rows.Count - 2;
+            int nColumnIndex = 12;
+            table.Rows[nRowIndex].Selected = true;
+            table.Rows[nRowIndex].Cells[nColumnIndex].Selected = true;
+            table.CurrentCell = table.Rows[nRowIndex].Cells[0];
+            table.FirstDisplayedScrollingRowIndex = nRowIndex;
+        }
 
+        public void GangsShow(bool mode, DataGridView table, List<Gangstar> basedlist, List<Gangstar> archivedlist, List<Gangstar> gangslist)
+        {
+            gangslist.Clear();
+            int index = table.CurrentCell.RowIndex;
+            string a;
+            if (mode) { a = basedlist[index].gang; }
+            else { a = archivedlist[index].gang; }
+            foreach (Gangstar gangsta in basedlist)
+            {
+                if (gangsta.gang == a)
+                {
+                    Gangstar gangstar = new Gangstar(gangsta);
+                    gangstar.gang += "(Основна база)";
+                    gangslist.Add(gangstar);
+                }
+            }
+            foreach (Gangstar gangsta in archivedlist)
+            {
+                if (gangsta.gang == a)
+                {
+                    Gangstar gangstar = new Gangstar(gangsta);
+                    gangstar.gang += "(Архів)";
+                    gangslist.Add(gangstar);
+                }
+            }
+
+
+        }
 
         //РОБОТА ІЗ JSON
 
@@ -132,7 +186,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         public void SaveJSonToFile(string filename1, string filename2, string jsonstring1, string jsonstring2)
         {
 
-            Directory.CreateDirectory($@"CurDir/json");
+            Directory.CreateDirectory($@"saves/json");
             File.WriteAllText(filename1, jsonstring1);
             File.WriteAllText(filename2, jsonstring2);
 
@@ -149,7 +203,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         {
             jsonstring1 = JsonConvert.SerializeObject(basedlist);
             jsonstring2 = JsonConvert.SerializeObject(archivedlist);
-            
+
         }
         public void SaveData(string filename1, string filename2, string? jsonstring1, string? jsonstring2, List<Gangstar> basedlist, List<Gangstar> archivedlist)
         {
@@ -157,5 +211,5 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
             SaveJSonToFile(filename1, filename2, jsonstring1, jsonstring2);
         }
     }
-} 
+}
 
