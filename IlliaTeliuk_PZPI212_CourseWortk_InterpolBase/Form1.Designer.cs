@@ -99,7 +99,7 @@
             this.BaseButton.Name = "BaseButton";
             this.BaseButton.Size = new System.Drawing.Size(714, 153);
             this.BaseButton.TabIndex = 0;
-            this.BaseButton.Text = "ЗАГАЛЬНА БАЗА";
+            this.BaseButton.Text = "ОСНОВНА БАЗА";
             this.BaseButton.UseVisualStyleBackColor = false;
             this.BaseButton.Click += new System.EventHandler(this.BaseButton_Click);
             // 
@@ -727,7 +727,7 @@
             // 
             // GangButton
             // 
-            this.GangButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.GangButton.BackColor = System.Drawing.Color.Cyan;
             this.GangButton.Image = ((System.Drawing.Image)(resources.GetObject("GangButton.Image")));
             this.GangButton.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             this.GangButton.Location = new System.Drawing.Point(661, 664);
@@ -793,7 +793,7 @@
             this.MinimizeBox = false;
             this.Name = "InterpolBase";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Довідник Інтерполу by Телюк ПЗПІ-21-2";
+            this.Text = "ДОВІДНИК ІНТЕРПОЛУ";
             ((System.ComponentModel.ISupportInitialize)(this.BaseOrArchiveTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

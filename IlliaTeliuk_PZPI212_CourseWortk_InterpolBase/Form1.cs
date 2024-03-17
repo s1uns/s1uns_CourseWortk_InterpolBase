@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 {
@@ -54,7 +53,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              data.Validation(gangsta.eyesColor, ref data.isValide, "string");
              
              gangsta.specialSigns = SpecialSignsTextBox.Text;
-             data.Validation(gangsta.specialSigns, ref data.isValide, "string");
+             data.Validation(gangsta.specialSigns, ref data.isValide, "neutral");
              
              gangsta.nationality = NationalityTextBox.Text;
              data.Validation(gangsta.nationality, ref data.isValide, "string");
@@ -66,16 +65,16 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
              data.Validation(gangsta.gang, ref data.isValide, "neutral");
              
              gangsta.roleInGang = GangRoleTextBox.Text;
-             data.Validation(gangsta.roleInGang, ref data.isValide, "string");
+             data.Validation(gangsta.roleInGang, ref data.isValide, "neutral");
             
              gangsta.crime = CrimeTextBox.Text;
-             data.Validation(gangsta.crime, ref data.isValide, "string");
+             data.Validation(gangsta.crime, ref data.isValide, "neutral");
              
             if (data.isValide) { 
                 data.MainBase.Add(gangsta);
                 ClearTable();
                 LoadTable(data.MainBase);
-                data.mode = true;
+                data.mode = 0;
                 NameTextBox.Clear();
                 SecondNameTextBox.Clear();
                 FatherNameTextBox.Clear();
@@ -101,20 +100,22 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         //Додавання злочинця до ОСНОВНОЇ БАЗИ
          private void BaseButton_Click(object sender, EventArgs e)
          {
-             data.mode = true;
+             data.mode = 0;
              ChangeButtonColor();
              data.ChangeToBase();
              ClearTable();
+             data.Gang.Clear();
              LoadTable(data.MainBase);
 
          }
         //Перемикання на ОСНОВНУ БАЗУ
         private void ArchiveButton_Click(object sender, EventArgs e)
          {
-             data.mode = false;
+             data.mode = 1;
              ChangeButtonColor();
              data.ChangeToArchive();
              ClearTable();
+             data.Gang.Clear();
              LoadTable(data.Archive);
          }
         //Перемикання на АРХІВ
@@ -144,9 +145,10 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
          {
             try
             {
-                if (data.mode) data.MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
-                else data.Archive.RemoveAt(data.Died(BaseOrArchiveTable));
-                /*data.SaveData(data.filenamebased, data.filenamearchive, data.based, data.archived, data.MainBase, data.Archive);*/
+                if (data.mode == 0) data.MainBase.RemoveAt(data.Died(BaseOrArchiveTable));
+                else if (data.mode == 1) data.Archive.RemoveAt(data.Died(BaseOrArchiveTable));
+                else MessageBox.Show("У режимі перегляду членів угрупування неможливо редагувати дані таблиці!");
+              
             }
             catch {
                 MessageBox.Show("Вибачте, трапилась помилка. Перевірте правильність вибору злочинця");
@@ -158,24 +160,32 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
          {
             try
             {
-                if (data.mode) { 
-                int index = BaseOrArchiveTable.CurrentCell.RowIndex;
-                data.mode = false;
-                ChangeButtonColor();
-                data.MoveData(data.MainBase, data.Archive, index);
-                ClearTable();
-                LoadTable(data.Archive);
-                data.SelectLastRow(BaseOrArchiveTable);
-                /*data.SaveData(data.filenamebased, data.filenamearchive, data.based, data.archived, data.MainBase, data.Archive);*/
+                if (data.mode == 0)
+                {
+                    int index = BaseOrArchiveTable.CurrentCell.RowIndex;
+                    data.mode = 1;
+                    ChangeButtonColor();
+                    data.MoveData(data.MainBase, data.Archive, index);
+                    ClearTable();
+                    LoadTable(data.Archive);
+                    data.SelectLastRow(BaseOrArchiveTable);
+                    
                 }
-                else
+                else if (data.mode == 1)
                 {
                     MessageBox.Show("Злочинець вже знаходиться в архіві!");
                 }
+                else MessageBox.Show("У режимі перегляду членів угрупування неможливо редагувати дані таблиці!");
+                
+
+                
             }
-            catch(Exception ex)
+            catch
             {
-                MessageBox.Show($"Виникла помилка при перенесені злочинця до архіву ({ex})! Спробуйте ще раз!");
+                ClearTable();
+                MessageBox.Show($"Виникла помилка при перенесені злочинця до архіву ! Спробуйте ще раз!");
+                data.mode = 1;
+                LoadTable(data.Archive);
             }
             
          }
@@ -185,52 +195,73 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 
             try
             {
-                if (!data.mode)
+                if (data.mode == 1)
                 {
                     int index = BaseOrArchiveTable.CurrentCell.RowIndex;
-                    data.mode = true;
+                    data.mode = 0;
                     ChangeButtonColor();
                     data.MoveData(data.Archive, data.MainBase, index);
                     ClearTable();
                     LoadTable(data.MainBase);
                     data.SelectLastRow(BaseOrArchiveTable);
-                    /*data.SaveData(data.filenamebased, data.filenamearchive, data.based, data.archived, data.MainBase, data.Archive);*/
-
                 }
-                else
+                else if(data.mode == 0)
                 {
                     MessageBox.Show("Злочинець вже знаходиться в основній базі!");
                 }
+                else MessageBox.Show("У режимі перегляду членів угрупування неможливо редагувати дані таблиці!");
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show($"Виникла помилка при перенесені злочинця до основної бази({ex})! Спробуйте ще раз!");
+                ClearTable();
+                MessageBox.Show($"Виникла помилка при перенесені злочинця до основної бази! Спробуйте ще раз!");
+                data.mode = 0;
+                LoadTable(data.MainBase);
             }
         }
         //Перенесення злочинця до ОСНОВНОЇ БАЗИ
         
         public void ChangeButtonColor()
         {
-            if (data.mode)
+            if (data.mode == 0)
             {
                 ArchiveButton.BackColor = Color.Red;
                 BaseButton.BackColor = Color.Green;
                 ChangedButton.BackColor = Color.Lime;
                 NewCrimeButton.BackColor = Color.Gray;
+                SearchButton.BackColor = SystemColors.ActiveCaption;
+                ChangeButton.BackColor = SystemColors.ActiveCaption;
+                DiedButton.BackColor = SystemColors.ButtonShadow;
+                GangButton.BackColor = Color.Cyan;
             }
-            else
+            else if(data.mode == 1)
             {
                 ArchiveButton.BackColor = Color.Green;
                 BaseButton.BackColor = Color.Blue;
                 ChangedButton.BackColor = Color.Gray;
                 NewCrimeButton.BackColor = Color.Brown;
+                SearchButton.BackColor = SystemColors.ActiveCaption;
+                ChangeButton.BackColor = SystemColors.ActiveCaption;
+                DiedButton.BackColor = SystemColors.ButtonShadow;
+                GangButton.BackColor = Color.Cyan;
+            }
+            else
+            {
+                BaseButton.BackColor = Color.Blue;
+                ArchiveButton.BackColor = Color.Red;
+                ChangedButton.BackColor = Color.Gray;
+                NewCrimeButton.BackColor = Color.Gray;
+                ChangeButton.BackColor = Color.Gray;
+                DiedButton.BackColor = Color.Gray;
+                GangButton.BackColor = Color.Green;
             }
         }
         //Зміна кольору кнопки
         
          public void ChangeButton_Click(object sender, EventArgs e)
-         {
-             if (data.mode)
+        {
+            try { 
+             if (data.mode == 0)
              {
                  ChangeButtonColor();
                  data.ChangeInfo(BaseOrArchiveTable, ChangeTextBox, data.MainBase);
@@ -238,7 +269,7 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
                  LoadTable(data.MainBase);
                  ChangeTextBox.Clear();
             }
-             else
+             else if(data.mode == 1)
              {
                  ChangeButtonColor();
                  data.ChangeInfo(BaseOrArchiveTable, ChangeTextBox, data.Archive);
@@ -246,17 +277,29 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
                  LoadTable(data.Archive);
                  ChangeTextBox.Clear();
              }
-         }
+            else MessageBox.Show("У режимі перегляду членів угрупування неможливо редагувати дані таблиці!");
+            }
+            catch
+            {
+                MessageBox.Show("Виникла помилка при спробі відредагувати дані таблиці. Перевірте правильність обраних даних!");
+            }
+        }
         //Кнопка ЗАМІНИТИ
         private void GangButton_Click(object sender, EventArgs e)
         {
-            data.GangsShow(data.mode, BaseOrArchiveTable, data.MainBase, data.Archive,data.Gang);
+            int gangmode = data.mode;
+            data.mode = 2;
+            ChangeButtonColor();
+            data.GangsShow(gangmode, BaseOrArchiveTable, data.MainBase, data.Archive,data.Gang);
             ClearTable();
             LoadTable(data.Gang);
+            
+
         }
          private void SaveButton_Click(object sender, EventArgs e)
          {
             data.SaveData(data.filenamebased, data.filenamearchive, data.based, data.archived, data.MainBase, data.Archive);
+            MessageBox.Show("Виконані зміни успішно збережено!");
 
          }
         //Кнопка ЗБЕРЕГТИ

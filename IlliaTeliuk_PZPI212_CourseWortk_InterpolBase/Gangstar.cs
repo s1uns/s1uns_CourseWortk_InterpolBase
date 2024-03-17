@@ -6,10 +6,11 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 
 namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
-{   [Serializable]
+{
+    [Serializable]
     public class Gangstar
     {
-        
+
         public string? name { get; set; }
         public string? secondName { get; set; }
         public string? fatherName { get; set; }
@@ -23,6 +24,22 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
         public string? gang { get; set; }
         public string? roleInGang { get; set; }
         public string? crime { get; set; }
+
+        public InterpolBase InterpolBase
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public Data Data
+        {
+            get => default;
+            set
+            {
+            }
+        }
 
         public Gangstar()
         {

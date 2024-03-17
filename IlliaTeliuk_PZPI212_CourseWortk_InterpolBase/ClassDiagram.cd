@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IlliaTeliuk_PZPI212_CourseWortk_InterpolBase.InterpolBase">
+    <Position X="7.25" Y="2.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>JgBJIogBAGpQAABMAIHOhQhS0pIBICECIaAQQYDICIA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Windows.Forms.Form" Collapsed="true">
+    <Position X="7.5" Y="1" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="IlliaTeliuk_PZPI212_CourseWortk_InterpolBase.Data">
+    <Position X="10.5" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAEACBAAQAAACBCABCoAiBAQBCIABAAAAAAAAAIgBAA=</HashCode>
+      <FileName>Data.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="InterpolBase" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="IlliaTeliuk_PZPI212_CourseWortk_InterpolBase.Gangstar">
+    <Position X="4" Y="4" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAgAAAEAEAAACAEAAAAMABICCAAIAAAAAQA=</HashCode>
+      <FileName>Gangstar.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="InterpolBase" />
+      <Property Name="Data" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="IlliaTeliuk_PZPI212_CourseWortk_InterpolBase.Program">
+    <Position X="4.5" Y="1" Width="1.5" />
+    <AssociationLine Name="InterpolBase" Type="IlliaTeliuk_PZPI212_CourseWortk_InterpolBase.InterpolBase" ManuallyRouted="true">
+      <Path>
+        <Point X="6" Y="1.094" />
+        <Point X="7.344" Y="1.094" />
+        <Point X="7.344" Y="2.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="InterpolBase" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

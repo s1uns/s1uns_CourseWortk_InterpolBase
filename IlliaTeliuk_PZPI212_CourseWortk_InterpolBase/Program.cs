@@ -2,6 +2,14 @@ namespace IlliaTeliuk_PZPI212_CourseWortk_InterpolBase
 {
     internal static class Program
     {
+        public static InterpolBase InterpolBase
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
